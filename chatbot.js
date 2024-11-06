@@ -26,7 +26,7 @@ function appendMessage(sender, message) {
 
 async function getChatbotResponse(message) {
   const apiUrl = 'https://api.openai.com/v1/chat/completions';  // Correct URL for chat completions
-  const apiKey = 'YOUR_OPENAI_API_KEY';  // Replace with your OpenAI API key
+  const apiKey = ' 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';  // Replace with your OpenAI API key
 
   const response = await fetch(apiUrl, {
     method: 'POST',
