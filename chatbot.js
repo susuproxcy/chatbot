@@ -27,7 +27,7 @@ function appendMessage(sender, message) {
 
 async function getChatbotResponse(message) {
   const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const apiKey = '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';
+  const apiKey = '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';
 
   try {
     const response = await fetch(apiUrl, {
