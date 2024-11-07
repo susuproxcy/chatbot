@@ -1,3 +1,4 @@
+require('dotenv').config(); // Load .env file
 async function sendMessage() {
     const userMessage = document.getElementById('user-input').value;
 
