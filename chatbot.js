@@ -1,44 +1,25 @@
-const sendBtn = document.getElementById("send-btn");
-const userInput = document.getElementById("user-input");
-const chatbox = document.getElementById("chatbox");
+const express = require('express');
+const fetch = require('node-fetch');
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-sendBtn.addEventListener("click", sendMessage);
-userInput.addEventListener("keypress", (e) => {
-  if (e.key === 'Enter') sendMessage();
-});
+app.use(express.json());
 
-async function sendMessage() {
-  const message = userInput.value.trim();
-  if (message === "") return;
+  const OPENAI_API_KEY = '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'; // Store your API key here securely
 
-  appendMessage("You", message);
-  userInput.value = "";
-
-  const response = await getChatbotResponse(message);
-  appendMessage("Chatbot", response);
-}
-
-function appendMessage(sender, message) {
-  const div = document.createElement("div");
-  div.innerHTML = `<strong>${sender}:</strong> ${message}`;
-  chatbox.appendChild(div);
-  chatbox.scrollTop = chatbox.scrollHeight;
-}
-
-async function getChatbotResponse(message) {
-  const apiUrl = 'https://api.openai.com/v1/chat/completions';
-  const apiKey = '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';
+app.post('/api/chat', async (req, res) => {
+  const userMessage = req.body.message;
 
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',  // Specify GPT-3.5-turbo model
-        messages: [{ role: 'user', content: message }],
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: userMessage }],
         max_tokens: 150,
       }),
     });
@@ -49,10 +30,13 @@ async function getChatbotResponse(message) {
     }
 
     const data = await response.json();
-    return data.choices[0].message.content.trim();
+    res.json({ reply: data.choices[0].message.content.trim() });
   } catch (error) {
     console.error('Error during API request:', error);
-    appendMessage("Chatbot", `Error: ${error.message}`);
-    return "Sorry, there was an error processing your request.";
+    res.status(500).json({ error: 'Error processing your request' });
   }
-}
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
