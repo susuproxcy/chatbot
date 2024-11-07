@@ -37,7 +37,7 @@ async function getChatbotResponse(message) {
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4-turbo',  // Specify 'gpt-4-turbo'
+        model: 'gpt-3.5-turbo',  // Specify GPT-3.5-turbo model
         messages: [{ role: 'user', content: message }],
         max_tokens: 150,
       }),
